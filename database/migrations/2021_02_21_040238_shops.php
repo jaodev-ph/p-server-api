@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class Profiles extends Migration
+class Shops extends Migration
 {
     /**
      * Run the migrations.
@@ -14,16 +14,15 @@ class Profiles extends Migration
     public function up()
     {
         //
-        Schema::create('profiles', function (Blueprint $table) {
+        Schema::create('shops', function(Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('user_id');
-            $table->string('title')->nullable();
-            $table->text('desc')->nullable();
-            $table->text('url')->nullable();
-            $table->string('icon')->nullable();
+            $table->string('name');
+            $table->text('description');
             $table->timestamps();
 
-            $table->index('user_id');
+            $table->index('user_id'); // for faste quering // indexing
+
         });
     }
 
@@ -35,6 +34,6 @@ class Profiles extends Migration
     public function down()
     {
         //
-        Schema::dropIfExists('profiles');
+        Schema::dropIfExists('shops');
     }
 }
