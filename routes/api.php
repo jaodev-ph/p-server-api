@@ -25,3 +25,4 @@ Route::post('/logout', 'LoginController@logout');
 
 Route::resource('/profile', ProfileController::class);
 Route::resource('/shop', ShopController::class);
+Route::resource('/product', ProductController::class);

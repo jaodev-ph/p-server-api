@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Profile;
+use App\Models\User;
 
 class ProfileController extends Controller
 {
@@ -14,7 +16,12 @@ class ProfileController extends Controller
     public function index()
     {
         //
-        echo "i am profile index";
+        $id = 1;
+        $profile = User::with(['profile'])->get();
+        // $arr = $id=
+         // $arr = $profile->id->toArray();
+        // $arr['id'] = $profile->toArray();
+        return  response()->json($profile, 200);        
     }
 
     /**
@@ -36,6 +43,23 @@ class ProfileController extends Controller
     public function store(Request $request)
     {
         //
+        $request->validate([
+            'user_id' => ['required'],
+            'title' => ['required'],
+            'desc' => ['required'],
+            'url' => ['required'],
+            'icon' => ['required'],
+        ]);
+
+        if (Profile::where('user_id', $request->user_id)->exists()) {
+            $result = 'The user can only have one shop';
+            return response()->json($result, 422);
+        }
+        Profile::create([
+            'user_id' => $request->user_id,
+            'name' => $request->name,
+            'description' => $request->description
+        ]);
     }
 
     /**
@@ -47,7 +71,8 @@ class ProfileController extends Controller
     public function show($id)
     {
         //
-        echo "Show " . $id;
+        $profile = Profile::where('user_id', $id)->get();
+        return response()->json($profile, 200);
     }
 
     /**
@@ -71,6 +96,7 @@ class ProfileController extends Controller
     public function update(Request $request, $id)
     {
         //
+
     }
 
     /**

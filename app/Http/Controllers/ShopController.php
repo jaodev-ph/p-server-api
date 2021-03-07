@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Shop;
+
 class ShopController extends Controller
 {
     /**
@@ -24,7 +25,7 @@ class ShopController extends Controller
     public function create()
     {
         //
-        
+
     }
 
     /**
@@ -38,15 +39,21 @@ class ShopController extends Controller
         //
         $request->validate([
             'user_id' => ['required'],
-            'name' => ['required', 'min:5'], 
+            'name' => ['required', 'min:5'],
             'description' => ['required']
         ]);
+
+        if (Shop::where('user_id', $request->user_id)->exists()) {
+            $result = [
+                "errors" => "The user can only have one shop"
+            ];
+            return response()->json($result, 422);
+        }
         Shop::create([
             'user_id' => $request->user_id,
             'name' => $request->name,
             'description' => $request->description
         ]);
-        
     }
 
     /**
@@ -71,7 +78,8 @@ class ShopController extends Controller
     public function edit($id)
     {
         //
-        
+
+
     }
 
     /**
@@ -84,6 +92,15 @@ class ShopController extends Controller
     public function update(Request $request, $id)
     {
         //
+        $request->validate([
+            'name' => ['required', 'min:5'],
+            'description' => ['required']
+        ]);
+
+        Shop::where('user_id', $id)->update($request->all());
+        $status = '[{"success": "Shop Successfully Updated"}]';
+        $obj = json_decode($status);
+        return response()->json($obj, 200);
     }
 
     /**
@@ -94,6 +111,6 @@ class ShopController extends Controller
      */
     public function destroy($id)
     {
-        //
+        //deleting
     }
 }
